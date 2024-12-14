@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Avatar } from "./Avatar";
-import { useMyBlogs } from "../hooks/Index";
+import { useUser } from "../hooks/Index";
 
 export const AppBar = () => {
-  const { loading, blogs } = useMyBlogs();
+  const { loading, user } = useUser();
 
   if (loading) {
     return (
@@ -13,7 +13,7 @@ export const AppBar = () => {
     );
   }
 
-  const authorname = blogs[0]?.author.name || "Anonymous";
+  const authorname = user?.name || "Anonymous";
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#6A1B9A] border-b-[1px] border-[#5A157F] shadow-md px-6 py-4 flex items-center justify-between z-50">
