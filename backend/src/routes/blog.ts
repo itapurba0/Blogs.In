@@ -106,7 +106,7 @@ return c.json({
 })
 
 blogRouter.get('/one/:id', async(c) => {
-	const id = await c.req.param("id");
+	const id =  c.req.param("id");
     const prisma = new PrismaClient({
 		datasourceUrl: c.env.DATABASE_URL,
 	}).$extends(withAccelerate());
@@ -140,6 +140,7 @@ blogRouter.get('/bulk', async (c) => {
     const prisma = new PrismaClient({
 		datasourceUrl: c.env.DATABASE_URL,
 	}).$extends(withAccelerate());
+  try{
     const blogs = await prisma.post.findMany({
       select:{
         id: true,
@@ -157,7 +158,13 @@ blogRouter.get('/bulk', async (c) => {
 	return c.json({
         blogs
     })
+  }catch(error){
+    c.status(411);
+    return c.json({
+        message: "error while fetching data"})
+  }
 })
+
 blogRouter.get('/my', async (c) => {
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -173,15 +180,9 @@ blogRouter.get('/my', async (c) => {
         content: true,
         published: true,
         publishDate: true,
-        author: {
-          select:{
-          name: true,
-          aboutMe: true,
-          bio: true
-          }
       }
     }
-    });
+    );
   return c.json({
         blogs
     })
