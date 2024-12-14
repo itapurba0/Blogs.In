@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@arkoroy/common-authenticate": ["node_modules/@arkoroy/common-authenticate"]
+    },
+    
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": [
+      "ESNext"
+    ],
+    "types": [
+      "@cloudflare/workers-types/2023-07-01"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "typeRoots": ["node_modules/@types", "node_modules"]
+  },
+  "exclude": [
+    "node_modules/@arkoroy/common-authenticate"
+  ]
+  
+}
