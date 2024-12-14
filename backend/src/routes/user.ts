@@ -109,5 +109,40 @@ userRouter.put('/updateAbout', async (c) => {
 		return c.text('Invalid');	
 	}
 })
+userRouter.get('/getUser', async (c) => {
+	const prisma = new PrismaClient({
+		datasourceUrl: c.env.DATABASE_URL,
+	}).$extends(withAccelerate());
+	const body = await c.req.json();
+	const hheader = c.req.header("Authorization") || "";
+	const token = hheader.split(" ")[0];
+	try{
+		const user = await verify(token, c.env.JWT_SECRET);
+		if (user.id) {
+			const ID = String(user.id);
+			await prisma.user.findUnique({
+				where: {
+					id: ID
+				},
+				select: {
+					name: body.name,
+					aboutMe: body.aboutMe,
+					bio: body.bio
+				}
+			})	
+			return c.json({
+				aboutMe: body.aboutMe,
+				bio: body.bio
+			})
+		} else {
+			c.status(403);
+			return c.json({ error: 'unauthorized' });
+		}
+	}catch(error){
+		console.log(error);
+		c.status(411);
+		return c.text('Invalid');	
+	}
+})
 
 

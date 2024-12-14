@@ -20,13 +20,8 @@ export const MyBlogs = () => {
     );
   }
 
-  if (blogs.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#C7B8EA] to-[#A0A8E7]">
-        <p>No blogs found.</p>
-      </div>
-    );
-  }
+  
+  
 
   const authorName = blogs[0].author.name || 'Anonymous';
   const authorAbout = blogs[0].author.aboutMe || 'Passionate blogger, content creator, and storyteller.';
@@ -42,7 +37,10 @@ export const MyBlogs = () => {
       <div className="pt-16 pb-10 px-6 md:px-10 lg:px-28">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20 mt-10">
           <div className="flex-1 flex flex-col gap-6">
-            {blogs.map((blog) => (
+            { blogs.length===0?
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#6E4A8B] mb-6">No Blogs Yet</h1>:
+  
+            blogs.map((blog) => (
               <MyBlogCard
                 key={blog.id}
                 title={blog.title}
