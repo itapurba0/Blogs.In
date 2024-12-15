@@ -111,38 +111,46 @@ userRouter.put('/updateAbout', async (c) => {
 })
 userRouter.get('/getUser', async (c) => {
 	const prisma = new PrismaClient({
-		datasourceUrl: c.env.DATABASE_URL,
+	  datasourceUrl: c.env.DATABASE_URL,
 	}).$extends(withAccelerate());
-	const body = await c.req.json();
-	const hheader = c.req.header("Authorization") || "";
-	const token = hheader.split(" ")[0];
-	try{
-		const user = await verify(token, c.env.JWT_SECRET);
-		if (user.id) {
-			const ID = String(user.id);
-			await prisma.user.findUnique({
-				where: {
-					id: ID
-				},
-				select: {
-					name: body.name,
-					aboutMe: body.aboutMe,
-					bio: body.bio
-				}
-			})	
-			return c.json({
-				aboutMe: body.aboutMe,
-				bio: body.bio
-			})
-		} else {
-			c.status(403);
-			return c.json({ error: 'unauthorized' });
-		}
-	}catch(error){
-		console.log(error);
-		c.status(411);
-		return c.text('Invalid');	
+  
+	const token = c.req.header("Authorization")?.split(" ")[0];
+  
+	if (!token) {
+	  c.status(401);
+	  return c.json({ error: 'Unauthorized' });
 	}
-})
+  
+	try {
+	  const user = await verify(token, c.env.JWT_SECRET);
+	  if (!user.id) {
+		c.status(403);
+		return c.json({ error: 'Forbidden' });
+	  }
+  
+	  const userData = await prisma.user.findFirst({
+		where: {
+		  id: user.id
+		},
+		select: {
+		  name: true,
+		  email: true,
+		  aboutMe: true,
+		  bio: true
+		}
+	  });
+  
+	  if (!userData) {
+		c.status(404);
+		return c.json({ error: 'User not found' });
+	  }
+  
+	  return c.json(userData);
+	} catch (error) {
+	  console.error(error);
+	  c.status(500);
+	  return c.json({ error: 'Internal Server Error' });
+	}
+  });
 
 
