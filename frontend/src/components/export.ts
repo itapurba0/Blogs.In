@@ -6,6 +6,7 @@ import { FullBlog } from "./FullBlog";
 import { MyBlogCard} from "./MyBlogCard";
 import { Avatar } from "./Avatar";
 import { CompleteProfile } from "./CompleteProfile";
+import { CommentSection } from "./CommentSection";
 
 
-export {Quote , SignupAuth, AppBar, BlogCard, FullBlog , Avatar, MyBlogCard , CompleteProfile };
+export {Quote , SignupAuth, AppBar, BlogCard, FullBlog , Avatar, MyBlogCard , CompleteProfile, CommentSection  };
