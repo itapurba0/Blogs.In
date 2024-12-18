@@ -4,16 +4,21 @@ import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 
 export interface Blog {
-  author: {
+  author?: {
     name: string;
-    aboutMe: string;
-    bio: string;
   };
   title: string;
   content: string;
   id: number;
   published: boolean;
   publishDate: string;
+}
+
+export interface User{
+  name: string,
+  email: string,
+  aboutMe: string,
+  bio: string
 }
 
 export const useBlog = ({ id }: { id: string }) => {
@@ -76,21 +81,18 @@ export const useMyBlogs = () => {
   return { loading, blogs };
 };
 
-export const useBlogs = () => {
+export const useBlogs = (): {loading: boolean; blogs: Blog[]} => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${BACKEND_URL}/api/v1/blog/bulk`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("jwt"),
-            },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+          headers: {
+            Authorization: localStorage.getItem("jwt"),
+          },
+        });
         setBlogs(response.data.blogs);
       } catch (error) {
         console.error(error);
@@ -98,7 +100,7 @@ export const useBlogs = () => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -191,3 +193,29 @@ export const usePublish = () => {
 return { loading, Publish };
 }
 
+export const useUser = () => {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User>(); 
+
+  useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(`${BACKEND_URL}/api/v1/user/getUser`,
+            {
+              headers: {
+                Authorization: localStorage.getItem("jwt"),
+              },
+            }
+          );
+          setUser(response.data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      }
+      fetchData();
+  }, []);
+  return { loading, user };
+}
