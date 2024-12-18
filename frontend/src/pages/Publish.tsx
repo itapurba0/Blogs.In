@@ -47,7 +47,6 @@ export const Publish = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#C7B8EA] to-[#8B6EA9] flex flex-col items-center">
       <AppBar />
       <div className="pt-24 pb-10 px-6 md:px-10 lg:px-28 w-full max-w-4xl">
-        {/* Glassmorphism Container */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 p-6 rounded-lg shadow-lg space-y-6">
           <input
             ref={titleInputRef}

@@ -20,6 +20,7 @@ model User {
   aboutMe  String?
   bio      String?
   posts    Post[]
+  comments Comment[]
 }
 
 model Post {
@@ -30,4 +31,15 @@ model Post {
   publishDate DateTime @updatedAt @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
+  comments Comment[]
+}
+
+model Comment {
+  id       String   @id @default(uuid())
+  content  String
+  postId   Int
+  post     Post     @relation(fields: [postId], references: [id])
+  authorId String
+  author   User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
 }
