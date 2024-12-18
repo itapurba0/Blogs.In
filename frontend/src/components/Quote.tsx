@@ -1,9 +1,41 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 export const Quote = () => {
-    return (
-        <div className="bg-slate-300 h-screen flex items-center justify-center">
-            <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between font-bold">
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque deserunt porro hic eos praesentium nihil corporis facilis. Id alias rerum, quidem voluptates maxime vitae voluptatem quos omnis ad, mollitia vero nobis, necessitatibus expedita officia veritatis facere ea in quis totam eaque facilis reprehenderit animi! Assumenda, delectus beatae. Qui, est repudiandae eveniet fugit voluptatum ducimus deserunt, minima dolores totam nemo aliquid."
-            </div>
+  const [quote, setQuote] = useState<string | null>(null);
+  const [author, setAuthor] = useState<string | null>(null);
+
+  const fetchQuote = async () => {
+        try {
+            const response = await axios.get('https://dummyjson.com/quotes/random');
+            setQuote(response.data.quote);
+            setAuthor(response.data.author);
+          } catch (error) {
+            console.error(error);
+          }
+    }
+    useEffect(() => {
+        fetchQuote(); 
+        const intervalId = setInterval(fetchQuote, 4000); 
+        return () => clearInterval(intervalId); 
+      }, []);
+
+  return (
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-[#C7B8EA] to-[#8B6EA9]">
+      <div className="relative bg-[rgba(255,255,255,0.2)] backdrop-blur-md border border-[rgba(255,255,255,0.3)] shadow-[0_10px_30px_rgba(0,0,0,0.2)] rounded-3xl p-8 w-full max-w-lg">
+        <div className="text-center">
+          {quote && (
+            <h1 className="text-4xl font-bold text-[#6E4A8B] drop-shadow-lg">
+              "{quote}"
+            </h1>
+          )}
+
+          {author && (
+            <p className="mt-4 text-lg font-semibold text-[#6E4A8B] drop-shadow-lg">
+              - {author}
+            </p>
+          )}
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
