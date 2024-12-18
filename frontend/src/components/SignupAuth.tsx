@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type {  SignupType } from "@arkoroy/common-authenticate/dist";
 import axios from "axios";
@@ -11,6 +11,7 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
     email: "",
     password: "",
   });
+  const [passwordType , setPasswordType] = useState('password');
 
   async function sendRequest() {
     try {
@@ -47,6 +48,7 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
 
         {/* Input Section */}
         <div className="mt-6">
+        {type === "signup" &&
           <LabelledInput
             label="User Name"
             placeholder="Enter your name"
@@ -54,6 +56,7 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
               setPostInputs((c: SignupType) => ({ ...c, name: e.target.value }))
             }
           />
+        }
           <LabelledInput
             label="Email"
             placeholder="Enter your email"
@@ -65,14 +68,20 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
           <LabelledInput
             label="Password"
             placeholder="Enter your password"
-            type="password"
+            type={passwordType}
             onChange={(e) =>
               setPostInputs((c: SignupType) => ({ ...c, password: e.target.value }))
             }
+          suffix={
+            <i
+              className={`fas ${passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'} text-[var(--text-color)]`}
+              onClick={() => setPasswordType(passwordType === 'password' ? 'text' : 'password')}
+            />
+          }
           />
 
           {/* Submit Button */}
-          <button
+          <button type="submit"
             onClick={sendRequest}
             className="w-full mt-6 bg-[#A78EA9] text-white font-semibold py-3 rounded-full shadow-lg hover:bg-[#8B6EA9] hover:shadow-2xl transition-all duration-300"
           >
@@ -89,20 +98,28 @@ interface LabelledInputTypes {
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   type?: string;
+  suffix?: React.ReactNode;
 }
 
-function LabelledInput({ label, placeholder, onChange, type }: LabelledInputTypes) {
+function LabelledInput({ label, placeholder, onChange, type, suffix }: LabelledInputTypes) {
   return (
     <div className="mt-4">
       <label className="block text-sm font-medium text-gray-200 mb-1">
         {label}
       </label>
-      <input
-        className="w-full bg-[rgba(255,255,255,0.6)] placeholder:text-[#8B6EA9] text-gray-700 text-sm border border-transparent focus:border-[#A78EA9] rounded-lg px-4 py-2 transition duration-300 shadow-md focus:shadow-lg focus:outline-none"
-        placeholder={placeholder}
-        type={type || "text"}
-        onChange={onChange}
-      />
+      <div className="relative">
+        <input
+          className="w-full bg-[rgba(255,255,255,0.6)] placeholder:text-[#8B6EA9] text-gray-700 text-sm border border-transparent focus:border-[#A78EA9] rounded-lg px-4 py-2 transition duration-300 shadow-md focus:shadow-lg focus:outline-none"
+          placeholder={placeholder}
+          type={type || "text"}
+          onChange={onChange}
+        />
+        {suffix && (
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+            {suffix}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
