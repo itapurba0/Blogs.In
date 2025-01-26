@@ -55,15 +55,15 @@ export const Publish = () => {
             placeholder="Title"
             className="text-4xl font-light text-gray-700 focus:outline-none w-full p-2 rounded-md bg-white bg-opacity-30"
           />
-          <div className='h-[400px] bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 p-6 rounded-lg shadow-lg'>
-          <ReactQuill
+            <div className='h-[400px] bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 p-6 rounded-lg shadow-lg'>
+            <ReactQuill
             value={content}
-            onChange={(e) => setContent(e)}
+            onChange={(e: string) => setContent(e)}
             placeholder="Start writing here..."
             style={{ height: '300px' }}
             ref={quillRef}
-          />
-          </div>
+            />
+            </div>
           <div className='flex justify-center space-x-8'>
           <button
             onClick={() => {

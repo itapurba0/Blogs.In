@@ -35,10 +35,10 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
 
 
             <div className="flex items-center space-x-4">
-              <Avatar name={blog.author.name || "Anonymous"} size={10} />
+              <Avatar name={blog.author?.name || "Anonymous"} size={10} />
               <div>
                 <h3 className="text-xl font-semibold text-gray-100">
-                  {blog.author.name}
+                  {blog.author?.name}
                 </h3>
                 <p className="text-gray-300 text-sm">
                   Passionate blogger, content creator, and storyteller.
