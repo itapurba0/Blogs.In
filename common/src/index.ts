@@ -34,3 +34,9 @@ export const publishPostInput = z.object({
     published: z.boolean(),
 });
 export type PublishPostType = z.infer<typeof publishPostInput>;
+
+export const createCommentInput = z.object({
+    content: z.string(),
+    postId: z.number(),
+});
+export type CreateCommentType = z.infer<typeof createCommentInput>;

@@ -6,25 +6,25 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
   console.log(sanitizedContent);
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#C7B8EA] to-[#8B6EA9]">
-     
+
       <AppBar />
 
-      
+
       <div className="pt-16 pb-10 px-6 md:px-10 lg:px-28">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20 mt-10">
-         
+
           <div className="flex-1 bg-[rgba(255,255,255,0.15)] backdrop-blur-lg border border-[rgba(255,255,255,0.2)] rounded-3xl shadow-lg p-8">
-         
+
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#6E4A8B] mb-6">
               {blog.title}
             </h1>
 
-            
+
             <p className="text-sm text-gray-800 mb-6">
               Posted on <span className="text-gray-100 font-semibold">2nd Dec 2022</span>
             </p>
             <div className="formated-content"
-           dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </div>
 
           <div className="w-full h-fit lg:w-[30%] bg-[rgba(255,255,255,0.15)] backdrop-blur-md border border-[rgba(255,255,255,0.2)] rounded-3xl shadow-lg p-6 text-white sticky top-20">
@@ -33,7 +33,7 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
               About the Author
             </h2>
 
-           
+
             <div className="flex items-center space-x-4">
               <Avatar name={blog.author.name || "Anonymous"} size={10} />
               <div>

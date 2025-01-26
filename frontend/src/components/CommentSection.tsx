@@ -20,22 +20,22 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       });
   }, [blogId]);
 
-//   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     setIsSubmitting(true);
-//     try {
-//       const response = await axios.post(`/api/v1/comments`, {
-//         blogId,
-//         text: newComment,
-//       });
-//       setComments([...comments, response.data]);
-//       setNewComment('');
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
+  //   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //     event.preventDefault();
+  //     setIsSubmitting(true);
+  //     try {
+  //       const response = await axios.post(`/api/v1/comments`, {
+  //         blogId,
+  //         text: newComment,
+  //       });
+  //       setComments([...comments, response.data]);
+  //       setNewComment('');
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setIsSubmitting(false);
+  //     }
+  //   };
 
   return (
     <div className="p-6 bg-[rgba(255,255,255,0.2)] backdrop-blur-md border border-[rgba(255,255,255,0.3)] shadow-[0_10px_30px_rgba(0,0,0,0.2)] rounded-3xl">
@@ -56,7 +56,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         </button>
       </form>
       <ul>
-       
+      {comments.map((comment) => (
+          <li key={comment.id} className="mt-4">
+            <p className="text-gray-100"><strong>{comment.author.name}:</strong> {comment.content}</p>
+          </li>
+        ))}
       </ul>
     </div>
   );

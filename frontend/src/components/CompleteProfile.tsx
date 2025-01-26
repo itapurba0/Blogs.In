@@ -69,21 +69,21 @@ export const CompleteProfile: React.FC<CompleteProfileProps> = ({
             />
           </div>
           <div className='flex justify-between'>
-          <button
-            type="submit"
-            className="bg-[#A78EA9] text-white py-2 px-4 rounded-lg hover:bg-[#C9C3E3] transition duration-300 ease-in-out"
-          >
-            Save Changes
-          </button>
-          <button
-          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out"
-          onClick={onClose}
-        >
-          Cancel
-        </button>
-        </div>
+            <button
+              type="submit"
+              className="bg-[#A78EA9] text-white py-2 px-4 rounded-lg hover:bg-[#C9C3E3] transition duration-300 ease-in-out"
+            >
+              Save Changes
+            </button>
+            <button
+              className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
-       
+
       </div>
     </div>
   );

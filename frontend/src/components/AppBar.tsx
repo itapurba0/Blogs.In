@@ -3,9 +3,9 @@ import { Avatar } from "./Avatar";
 import { useUser } from "../hooks/Index";
 import { HiOutlineLogout } from "react-icons/hi";
 export const AppBar = () => {
- 
- const { loading, user} = useUser()
- const navigate = useNavigate();
+
+  const { loading, user } = useUser()
+  const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
     navigate("/");
@@ -34,25 +34,25 @@ export const AppBar = () => {
       </div>
 
       <div className="flex items-center space-x-6">
-       
-          <>
-            <Link to="/Publish">
-              <button
-                className="bg-[#8B6EA9] text-white px-5 py-2.5 rounded-full shadow-md hover:bg-[#6E4A8B] hover:shadow-lg transition-all duration-300"
-              >
-                New
-              </button>
-            </Link>
-            <div className="flex items-center space-x-2">
-              <Link to="/myblogs"  className="flex items-center space-x-1">
+
+        <>
+          <Link to="/Publish">
+            <button
+              className="bg-[#8B6EA9] text-white px-5 py-2.5 rounded-full shadow-md hover:bg-[#6E4A8B] hover:shadow-lg transition-all duration-300"
+            >
+              New
+            </button>
+          </Link>
+          <div className="flex items-center space-x-2">
+            <Link to="/myblogs" className="flex items-center space-x-1">
               <Avatar size={10} name={authorname} />
               <span className="text-white">{authorname}</span>
-              </Link>
-              <div onClick={logout}>
-                <HiOutlineLogout size={25} className="text-white cursor-pointer" color="white" />
-              </div>
+            </Link>
+            <div onClick={logout}>
+              <HiOutlineLogout size={25} className="text-white cursor-pointer" color="white" />
             </div>
-          </>
+          </div>
+        </>
       </div>
     </div>
   );

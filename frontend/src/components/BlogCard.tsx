@@ -13,12 +13,12 @@ interface BlogCardTypes {
 }
 
 export const BlogCard = ({ authorName, title, content, publishDate, id, onCommentClick }: BlogCardTypes) => {
-  
+
   const data = content.slice(0, 250) + "...";
   const words = content.split(/\s+/).length;
   const publishedDateValue = parseISO(publishDate);
 
-  
+
 
   return (
     <div
@@ -49,16 +49,16 @@ export const BlogCard = ({ authorName, title, content, publishDate, id, onCommen
             Continue Reading..
           </button>
         </Link>
-        
+
         <button onClick={onCommentClick} className="mt-8">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.0714285714285714" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-message-square-text">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          <path d="M13 8H7"/>
-          <path d="M17 12H7"/>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            <path d="M13 8H7" />
+            <path d="M17 12H7" />
           </svg>
         </button>
       </div>
-      
+
     </div>
   );
 };
