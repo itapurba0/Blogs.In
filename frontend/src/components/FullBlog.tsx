@@ -1,9 +1,10 @@
 import { Blog } from "../hooks/Index";
 import { AppBar, Avatar } from "./export";
 import DOMPurify from 'dompurify';
+
+
 export const FullBlog = ({ blog }: { blog: Blog }) => {
   const sanitizedContent = DOMPurify.sanitize(blog.content);
-  console.log(sanitizedContent);
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#C7B8EA] to-[#8B6EA9]">
 
@@ -55,3 +56,5 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
     </div>
   );
 };
+
+
