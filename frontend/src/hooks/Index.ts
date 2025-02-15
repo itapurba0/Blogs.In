@@ -21,11 +21,11 @@ export interface User{
   bio: string
 }
 
-interface Comment {
-  comment: string;
-  author: string; 
-  blogId: number;
-}
+// interface Comment {
+//   comment: string;
+//   author: string; 
+//   blogId: number;
+// }
 
 export const useBlog = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(true);
