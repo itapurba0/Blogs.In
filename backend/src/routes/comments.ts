@@ -1,8 +1,10 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { PrismaClient } from '@prisma/client/edge';
+import { withAccelerate } from '@prisma/extension-accelerate';
 import { Hono } from 'hono';
 import { verify } from "hono/jwt";
-import { createCommentInput } from "@arkoroy/common-auth/dist";
+import { createCommentInput } from "../../../common/src/index";
+import { cors } from 'hono/cors';
+
 export const commentRouter = new Hono<{
     Bindings: {
         DATABASE_URL: string,
@@ -13,9 +15,16 @@ export const commentRouter = new Hono<{
     }
 }>();
 
+// Add CORS middleware
+commentRouter.use(cors({
+    origin: '*', // Adjust this to your frontend domain
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Authorization', 'Content-Type']
+}));
+
 commentRouter.use('/*', async (c, next) => {
     const hheader = c.req.header("Authorization") || "";
-    const token = hheader.split(" ")[0];
+    const token = hheader.split(" ")[0]; // Extract the token correctly
     try {
         const response = await verify(token, c.env.JWT_SECRET);
         if (response.id) {
@@ -56,11 +65,11 @@ commentRouter.post('/comment', async (c) => {
                 }
             }
         }
-    })
+    });
     return c.json({
         id: comment.id
-    })
-})
+    });
+});
 
 commentRouter.get('/all/:id', async (c) => {
     const id = await c.req.param("id");
@@ -80,24 +89,25 @@ commentRouter.get('/all/:id', async (c) => {
                 }
             }
         }
-    })
+    });
     return c.json({
         comments
-    })
-})
+    });
+});
 
-commentRouter.delete('/delete/:id', async (c) => {
-    const id = await c.req.param("id");
+commentRouter.delete('/delete/:postId', async (c) => {
+    const id = await c.req.param("postId");
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const comment = await prisma.comment.delete({
         where: {
-            id: Number(id)
+            id: id
         }
-    })
+    });
     return c.json({
         id: comment.id
-    })
-})
+    });
+});
+
 
