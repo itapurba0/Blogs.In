@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { AppBar, BlogCard,CommentSection } from "../components/export";
+import { AppBar, BlogCard, CommentSection } from "../components/export";
 import { useBlogs } from "../hooks/Index";
 
 export const Blogs = () => {
   const { loading, blogs } = useBlogs();
-  const [currentBlogId , setCurrentBlogId] = useState<number | null>(null);
-  const [showComments , setShowComments ]  = useState(false);
+  const [currentBlogId, setCurrentBlogId] = useState<number | null>(null);
+  const [showComments, setShowComments] = useState(false);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#C7B8EA] to-[#A0A8E7]">
@@ -13,6 +14,7 @@ export const Blogs = () => {
       </div>
     );
   }
+
   return (
     <div className="bg-gradient-to-br from-[#C7B8EA] to-[#8B6EA9] h-100%">
       <AppBar />
@@ -28,18 +30,15 @@ export const Blogs = () => {
                 publishDate={blog.publishDate}
                 id={blog.id}
                 onCommentClick={() => {
+                  console.log("Comment button clicked for blog id:", blog.id);
                   setCurrentBlogId(blog.id);
-                  setShowComments(true);
+                  setShowComments(!showComments);
                 }}
               />
+              <CommentSection blogId={blog.id} show={showComments && currentBlogId === blog.id} />
             </div>
           ))}
         </div>
-        {showComments && currentBlogId !== null && (
-          <div className="absolute top-0 left-0 w-full p-6 shadow-md transition-all duration-500">
-            <CommentSection blogId={currentBlogId} />
-          </div>
-        )}
       </div>
     </div>
   );
