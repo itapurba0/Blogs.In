@@ -21,11 +21,14 @@ export interface User{
   bio: string
 }
 
-// interface Comment {
-//   comment: string;
-//   author: string; 
-//   blogId: number;
-// }
+interface Comment {
+  content: string;
+  id: string;
+  author:{
+    name: string;
+  }
+  blogId: number;
+}
 
 export const useBlog = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(true);
@@ -159,7 +162,7 @@ export const useHandleDelete = () => {
       });
       if (response.status === 200) {
         alert("Blog deleted successfully");
-        navigate(`/MyBlogs`, { replace: true });
+        navigate(`/Blogs`);
       }
     } catch (error) {
       console.error("Error deleting blog:", error);
@@ -224,4 +227,32 @@ export const useUser = () => {
       fetchData();
   }, []);
   return { loading, user };
+}
+
+export const useComment = ( blogId: number) => {
+  const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${BACKEND_URL}/api/v1/comments/all/${blogId}`
+          ,{
+            headers: {
+              Authorization: localStorage.getItem("jwt"),
+            },
+          }
+        );
+        setComments(response.data.comments);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [blogId]);
+  return { loading, comments};
 }
