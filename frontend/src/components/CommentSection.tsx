@@ -1,42 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import { BACKEND_URL } from '../config';
-
+import { useComment } from '../hooks/Index';
+import { Avatar } from './Avatar';
 interface CommentSectionProps {
   blogId: number;
-  show: boolean; // Add a prop to control visibility
+  show: boolean; 
 }
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ blogId, show }) => {
-  interface Comment {
-    id: number;
-    author: {
-      name: string;
-    };
-    content: string;
-  }
 
-  const [comments, setComments] = useState<Comment[]>([]);
+  const { loading, comments } = useComment(blogId);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/comments/all/${blogId}`)
-      .then(response => {
-        console.log("API response:", response);
-        if (Array.isArray(response.data.comments)) {
-          setComments(response.data.comments);
-        } else {
-          console.error("Expected an array of comments, but got:", response.data);
-          setComments([]);
-        }
-      })
-      .catch(error => {
-        console.error("Error fetching comments:", error);
-        setComments([]);
-      });
-  }, [blogId]);
+ 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#C7B8EA] to-[#A0A8E7]">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white"></div>
+      </div>
+    );
+  }
+ 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,12 +32,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId, show }) 
       const response = await axios.post(`${BACKEND_URL}/api/v1/comments/comment`, {
         postId: blogId,
         content: newComment,
-      }, {
-        headers: {
-          Authorization: `Bearer YOUR_AUTH_TOKEN`, // Replace with your actual token
-        },
-      });
-      setComments([...comments, response.data]);
+      }, {headers: {
+        Authorization: localStorage.getItem("jwt"),
+      }
+    });
+      console.log("Comment submitted:", response.data);
       setNewComment('');
     } catch (error) {
       console.error("Error submitting comment:", error);
@@ -84,8 +69,16 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId, show }) 
         {error && <p className="text-red-500 mb-2">{error}</p>}
         <ul className="space-y-4">
           {comments.map((comment) => (
-            <li key={comment.id} className="border-b border-gray-200 pb-2">
-              <p className="text-gray-800"><strong>{comment.author.name}:</strong> {comment.content}</p>
+            <li key={comment.id} className="border-b border-gray-300 pb-2">
+              <div className="flex items-start space-x-3">
+          <div className="flex-shrink-0">
+            <Avatar name={comment.author.name} size={8} />
+          </div>
+          <div>
+            <p className="text-gray-900 font-semibold">{comment.author.name}</p>
+            <p className="text-gray-700">{comment.content}</p>
+          </div>
+              </div>
             </li>
           ))}
         </ul>
