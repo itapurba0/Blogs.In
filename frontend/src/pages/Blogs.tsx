@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { AppBar, BlogCard, CommentSection } from "../components/export";
+
+import { AppBar, BlogCard} from "../components/export";
 import { useBlogs } from "../hooks/Index";
 
 export const Blogs = () => {
   const { loading, blogs } = useBlogs();
-  const [currentBlogId, setCurrentBlogId] = useState<number | null>(null);
-  const [showComments, setShowComments] = useState(false);
 
   if (loading) {
     return (
@@ -29,13 +27,7 @@ export const Blogs = () => {
                 content={blog.content}
                 publishDate={blog.publishDate}
                 id={blog.id}
-                onCommentClick={() => {
-                  console.log("Comment button clicked for blog id:", blog.id);
-                  setCurrentBlogId(blog.id);
-                  setShowComments(!showComments);
-                }}
               />
-              <CommentSection blogId={blog.id} show={showComments && currentBlogId === blog.id} />
             </div>
           ))}
         </div>
