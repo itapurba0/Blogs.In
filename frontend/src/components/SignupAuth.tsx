@@ -20,10 +20,10 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
         postInputs
       );
       const jwt = response.data.jwt;
-      console.log(jwt);
       localStorage.setItem("jwt", jwt);
       navigate("/blogs");
-    } catch (e) {
+    } catch (error) {
+      console.error(error);
       alert("Error while signing up, please check the inputs");
     }
   }
