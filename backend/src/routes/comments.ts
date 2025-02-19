@@ -15,12 +15,6 @@ export const commentRouter = new Hono<{
     }
 }>();
 
-// Add CORS middleware
-commentRouter.use(cors({
-    origin: '*', // Adjust this to your frontend domain
-    allowMethods: ['GET', 'POST', 'DELETE'],
-    allowHeaders: ['Authorization', 'Content-Type']
-}));
 
 commentRouter.use('/*', async (c, next) => {
     const hheader = c.req.header("Authorization") || "";
@@ -72,13 +66,14 @@ commentRouter.post('/comment', async (c) => {
 });
 
 commentRouter.get('/all/:id', async (c) => {
-    const id = await c.req.param("id");
+    const idd = c.req.param("id");
+    console.log(idd);
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const comments = await prisma.comment.findMany({
         where: {
-            postId: Number(id)
+            postId: Number(idd)
         },
         select: {
             id: true,
@@ -96,7 +91,7 @@ commentRouter.get('/all/:id', async (c) => {
 });
 
 commentRouter.delete('/delete/:postId', async (c) => {
-    const id = await c.req.param("postId");
+    const id = c.req.param("postId");
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
