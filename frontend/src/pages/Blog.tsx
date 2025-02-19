@@ -1,4 +1,4 @@
-import {  FullBlog} from "../components/export";
+import { FullBlog } from "../components/export";
 import { useBlog } from "../hooks/Index";
 import { useParams } from "react-router-dom";
 export const Blog = () => {
