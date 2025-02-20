@@ -72,7 +72,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId, show }) 
             <li key={comment.id} className="border-b border-gray-300 pb-2">
               <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <Avatar name={comment.author.name} size={8} />
+            <Avatar name={comment.author.name} size={10} />
           </div>
           <div>
             <p className="text-gray-900 font-semibold">{comment.author.name}</p>
