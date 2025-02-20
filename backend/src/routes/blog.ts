@@ -192,12 +192,24 @@ blogRouter.delete('/delete/:id', async (c) => {
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
-    const blog =await prisma.post.delete({
+  try {
+    await prisma.comment.deleteMany({
         where: {
-            id : Number(id)
+            postId: Number(id)
         }
-    })
-  return c.json({
+    });
+    const blog = await prisma.post.delete({
+        where: {
+            id: Number(id)
+        }
+    });
+
+    return c.json({
         id: blog.id
-    })
+    });
+} catch (error) {
+    console.error("Error deleting blog and comments:", error);
+    c.status(500);
+    return c.json({ error: 'Internal Server Error' });
+}
 })
