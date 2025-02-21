@@ -69,15 +69,15 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId, show }) 
         {error && <p className="text-red-500 mb-2">{error}</p>}
         <ul className="space-y-4">
           {comments.map((comment) => (
-            <li key={comment.id} className="border-b border-gray-300 pb-2">
+            <li key={comment.id} className="border border-gray-300 p-4 rounded-lg shadow-sm bg-[#d8bfec]">
               <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0">
-            <Avatar name={comment.author.name} size={10} />
-          </div>
-          <div>
-            <p className="text-gray-900 font-semibold">{comment.author.name}</p>
-            <p className="text-gray-700">{comment.content}</p>
-          </div>
+                <div className="flex-shrink-0">
+                  <Avatar name={comment.author.name} size={10} />
+                </div>
+                <div>
+                  <p className="text-gray-900 font-semibold">{comment.author.name}</p>
+                  <p className="text-gray-700">{comment.content}</p>
+                </div>
               </div>
             </li>
           ))}
