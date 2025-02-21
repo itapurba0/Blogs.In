@@ -18,11 +18,12 @@ export const CompleteProfile: React.FC<CompleteProfileProps> = ({
   authorAbout,
   authorBio,
 }) => {
-  if (!isOpen) return null;
   const navigate = useNavigate();
   const [name, setName] = React.useState(authorName);
   const [aboutMe, setAboutMe] = React.useState(authorAbout);
   const [bio, setBio] = React.useState(authorBio);
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,7 +35,7 @@ export const CompleteProfile: React.FC<CompleteProfileProps> = ({
     if (res.status === 200) {
       alert("saved successfully");
       onClose();
-      navigate(`/MyBlogs`), { refresh: true };
+      navigate(`/MyBlogs`, { state: { refresh: true } });
     }
   };
 
