@@ -40,10 +40,9 @@ export const BlogCard: React.FC<BlogCardTypes> = ({
         <h2 className="text-2xl font-semibold text-[#8B6EA9] mb-2 drop-shadow-lg">
           {title}
         </h2>
-        <div
-          className="text-gray-100 text-sm formatted-content"
-          dangerouslySetInnerHTML={{ __html: data }}
-        />
+        <div className="text-gray-100 text-sm formatted-content">
+          {data}
+          </div>
       </div>
       <div className="mt-4 text-gray-700 text-xs">
         {`${Math.ceil(words / 100)} min read`}
