@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { Hono } from 'hono';
 import { verify } from "hono/jwt";
-import { createCommentInput } from "../../../common/src/index";
+import { createCommentInput } from "@arkoroy2/common-auth/dist";
 import { cors } from 'hono/cors';
 
 export const commentRouter = new Hono<{

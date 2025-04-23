@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState , useCallback} from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ export interface Blog {
   publishDate: string;
 }
 
-export interface User{
+export interface User {
   name: string,
   email: string,
   aboutMe: string,
@@ -24,7 +24,7 @@ export interface User{
 interface Comment {
   content: string;
   id: string;
-  author:{
+  author: {
     name: string;
   }
   blogId: number;
@@ -90,7 +90,7 @@ export const useMyBlogs = () => {
   return { loading, blogs };
 };
 
-export const useBlogs = (): {loading: boolean; blogs: Blog[]} => {
+export const useBlogs = (): { loading: boolean; blogs: Blog[] } => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   useEffect(() => {
@@ -109,7 +109,7 @@ export const useBlogs = (): {loading: boolean; blogs: Blog[]} => {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -178,10 +178,10 @@ export const usePublish = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const Publish = async (title: string, content: string,published: boolean) => {
+  const Publish = async (title: string, content: string, published: boolean) => {
     setLoading(true);
     try {
-      const payload = { title, content,published };
+      const payload = { title, content, published };
       console.log(payload);
       const response = await axios.post(`${BACKEND_URL}/api/v1/blog/post`, payload, {
         headers: {
@@ -197,62 +197,70 @@ export const usePublish = () => {
       console.error("Error publishing blog:", error);
     } finally {
       setLoading(false);
-    }    
-};
-return { loading, Publish };
+    }
+  };
+  return { loading, Publish };
 }
 
 export const useUser = () => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User>(); 
-
-  useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(`${BACKEND_URL}/api/v1/user/getUser`,
-            {
-              headers: {
-                Authorization: localStorage.getItem("jwt"),
-              },
-            }
-          );
-          setUser(response.data);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      }
-      fetchData();
-  }, []);
-  return { loading, user };
-}
-
-export const useComment = ( blogId: number) => {
-  const [loading, setLoading] = useState(true);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/v1/comments/all/${blogId}`
-          ,{
+        const response = await axios.get(`${BACKEND_URL}/api/v1/user/getUser`,
+          {
             headers: {
               Authorization: localStorage.getItem("jwt"),
             },
           }
         );
-        setComments(response.data.comments);
+        setUser(response.data);
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     fetchData();
-  }, [blogId]);
-  return { loading, comments};
+  }, []);
+  return { loading, user };
 }
+
+interface UseComment {
+  loading: boolean;
+  comments: Comment[];
+  error: string | null;
+  refetchComments: () => void;
+}
+
+export const useComment = (blogId: number): UseComment => {
+  const [loading, setLoading] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const refetchComments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/v1/comments/all/${blogId}`, {
+        headers: {
+          Authorization: localStorage.getItem("jwt"),
+        }
+      });
+      setComments(response.data.comments);
+    } catch (e) {
+      setError('Failed to fetch comments. Please try again. ');
+      console.error("Error fetching comments:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [blogId, setComments, setError, setLoading]);
+
+  useEffect(() => {
+    refetchComments();
+  }, [blogId , refetchComments]);
+
+  return { loading, comments, error, refetchComments };
+};

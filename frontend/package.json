@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@arkoroy/common-authenticate": "^1.1.0",
+    "@arkoroy2/common-auth": "^1.1.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@saplingai/sapling-js": "^1.0.33",
     "axios": "^1.7.7",
@@ -39,6 +40,6 @@
     "tailwindcss": "^3.4.12",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^6.3.2"
   }
 }

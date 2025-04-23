@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import type {  SignupType } from "@arkoroy/common-authenticate/dist";
+import type { SignupType } from "@arkoroy2/common-auth/dist";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
@@ -11,7 +11,7 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
     email: "",
     password: "",
   });
-  const [passwordType , setPasswordType] = useState('password');
+  const [passwordType, setPasswordType] = useState('password');
 
   async function sendRequest() {
     try {
@@ -48,15 +48,15 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
 
         {/* Input Section */}
         <div className="mt-6">
-        {type === "signup" &&
-          <LabelledInput
-            label="User Name"
-            placeholder="Enter your name"
-            onChange={(e) =>
-              setPostInputs((c: SignupType) => ({ ...c, name: e.target.value }))
-            }
-          />
-        }
+          {type === "signup" &&
+            <LabelledInput
+              label="User Name"
+              placeholder="Enter your name"
+              onChange={(e) =>
+                setPostInputs((c: SignupType) => ({ ...c, name: e.target.value }))
+              }
+            />
+          }
           <LabelledInput
             label="Email"
             placeholder="Enter your email"
@@ -72,12 +72,12 @@ export const SignupAuth = ({ type }: { type: "signin" | "signup" }) => {
             onChange={(e) =>
               setPostInputs((c: SignupType) => ({ ...c, password: e.target.value }))
             }
-          suffix={
-            <i
-              className={`fas ${passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'} text-[var(--text-color)]`}
-              onClick={() => setPasswordType(passwordType === 'password' ? 'text' : 'password')}
-            />
-          }
+            suffix={
+              <i
+                className={`fas ${passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'} text-[var(--text-color)]`}
+                onClick={() => setPasswordType(passwordType === 'password' ? 'text' : 'password')}
+              />
+            }
           />
 
           {/* Submit Button */}
