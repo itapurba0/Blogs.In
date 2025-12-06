@@ -1,5 +1,5 @@
 
-import { AppBar, BlogCard} from "../components/export";
+import { AppBar, BlogCard } from "../components/export";
 import { useBlogs } from "../hooks/Index";
 
 export const Blogs = () => {
