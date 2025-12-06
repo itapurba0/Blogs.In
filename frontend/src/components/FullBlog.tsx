@@ -29,7 +29,7 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
                 <path d="M13 8H7" />
                 <path d="M17 12H7" />
               </svg>
-              <span className="text-white">Comments</span>
+              <span className="text-">Comments</span>
             </button>
             {showComments && (
               <div className="mt-8">
