@@ -1,6 +1,28 @@
 import { useState } from "react";
+import DOMPurify from 'dompurify';
 import { Blog } from "../hooks/Index";
 import { AppBar, Avatar, CommentSection } from "./export";
+
+function decodeIfEscaped(str: string) {
+  if (!str) return str;
+  if (str.includes('&lt;') || str.includes('&gt;')) {
+    const el = document.createElement('textarea');
+    el.innerHTML = str;
+    return el.value;
+  }
+  return str;
+}
+function renderBlogHtml(html: string) {
+  // if the HTML was double-escaped in the DB (e.g. "&lt;h1&gt;..."), decode it:
+  const decoded = decodeIfEscaped(html);
+
+  // sanitize the HTML to prevent XSS
+  const clean = DOMPurify.sanitize(decoded);
+
+  return <div className="prose prose-invert" dangerouslySetInnerHTML={{ __html: clean }} />;
+}
+
+
 
 export const FullBlog = ({ blog }: { blog: Blog }) => {
 
@@ -22,7 +44,10 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
             <p className="text-sm text-gray-800 mb-6">
               Posted on <span className="text-gray-100 font-semibold">2nd Dec 2022</span>
             </p>
-            <div dangerouslySetInnerHTML={{ __html: blog.content }} className="text-gray-100 text-lg leading-relaxed mb-6"></div>
+            {/* sanitize and render stored HTML content */}
+            <div className="text-gray-100 text-lg leading-relaxed mb-6 prose prose-invert max-w-none"
+              
+            >{renderBlogHtml(blog.content)}</div>
             <button onClick={handleCommentClick} className="mt-8 flex items-center space-x-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.0714285714285714" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-square-text">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />

@@ -1,6 +1,9 @@
 import { useState, useRef } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import TextAlign from '@tiptap/extension-text-align';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AppBar } from "../components/AppBar";
@@ -13,7 +16,17 @@ export const Publish = () => {
   const [content, setContent] = useState("");
   const navigate = useNavigate();
   const titleInputRef = useRef(null);
-  const quillRef = useRef(null);
+  // TipTap editor
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image,
+      Placeholder.configure({ placeholder: 'Start writing here...' }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    ],
+    content: content || '<p></p>',
+    onUpdate: ({ editor }: { editor: any }) => setContent(editor.getHTML()),
+  });
   // useEffect(() => {
   //   Sapling.init({
   //     key: SAPLING_API_KEY,
@@ -55,14 +68,32 @@ export const Publish = () => {
             placeholder="Title"
             className="text-4xl font-light text-gray-700 focus:outline-none w-full p-2 rounded-md bg-white bg-opacity-30"
           />
-          <div className='h-[400px] bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 p-6 rounded-lg shadow-lg'>
-            <ReactQuill
-              value={content}
-              onChange={(e: string) => setContent(e)}
-              placeholder="Start writing here..."
-              style={{ height: '300px' }}
-              ref={quillRef}
-            />
+          <div className='border border-white/10 rounded-lg p-2 bg-[rgba(255,255,255,0.03)]'>
+            <div className='flex gap-2 mb-2 flex-wrap'>
+              <button type='button' onClick={() => editor?.chain().focus().toggleBold().run()} className='px-2 py-1 bg-white/5 rounded'>B</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleItalic().run()} className='px-2 py-1 bg-white/5 rounded'>I</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleUnderline().run()} className='px-2 py-1 bg-white/5 rounded'>U</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleStrike().run()} className='px-2 py-1 bg-white/5 rounded'>S</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()} className='px-2 py-1 bg-white/5 rounded'>H1</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} className='px-2 py-1 bg-white/5 rounded'>H2</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()} className='px-2 py-1 bg-white/5 rounded'>H3</button>
+              <button type='button' onClick={() => editor?.chain().focus().setParagraph().run()} className='px-2 py-1 bg-white/5 rounded'>P</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleBulletList().run()} className='px-2 py-1 bg-white/5 rounded'>• List</button>
+              <button type='button' onClick={() => editor?.chain().focus().toggleOrderedList().run()} className='px-2 py-1 bg-white/5 rounded'>1. List</button>
+              <button type='button' onClick={() => {
+                const url = prompt('Image URL');
+                if (url) editor?.chain().focus().setImage({ src: url }).run();
+              }} className='px-2 py-1 bg-white/5 rounded'>Image</button>
+              <button type='button' onClick={() => {
+                const url = prompt('Link URL');
+                if (url) editor?.chain().focus().setLink({ href: url }).run();
+              }} className='px-2 py-1 bg-white/5 rounded'>Link</button>
+              <button type='button' onClick={() => editor?.chain().focus().unsetAllMarks().clearNodes().run()} className='px-2 py-1 bg-red-600/20 rounded'>Clear</button>
+            </div>
+
+            <div className='min-h-[300px] prose prose-invert max-w-none'>
+              <EditorContent editor={editor} className='ql-editor p-4 bg-transparent outline-none' />
+            </div>
           </div>
           <div className='flex justify-center space-x-8'>
             <button
@@ -75,7 +106,7 @@ export const Publish = () => {
             </button>
             <button
               onClick={() => {
-                publish.Publish(title, content, true);
+                publish.Publish(title, (editor ? editor.getHTML() : content), true);
               }}
               className="px-4 py-2 bg-green-500 text-white rounded-full"
             >
